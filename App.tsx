@@ -4,6 +4,9 @@ import TabsNavigator from './src/navigation/TabsNavigator';
 import { Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { useEffect } from 'react';
+import { ThemeProvider } from './src/context/ThemeContext';
+import { NavigationContainer } from '@react-navigation/native';
+import { AuthProvider } from './src/context/AuthContext';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -30,5 +33,11 @@ export default function App() {
     registerForPushNotificationsAsync();
   }, []);
 
-  return <TabsNavigator />;
+  return (
+    <AuthProvider>
+      <ThemeProvider>
+        <TabsNavigator />
+      </ThemeProvider>
+    </AuthProvider>
+  );
 }

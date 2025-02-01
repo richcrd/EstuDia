@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react'
 import { useTaskStore } from '../store/taskStore';
 import TaskItem from '../components/TaskItem';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useTheme } from "../context/ThemeContext";
 
 export default function TasksScreen() {
   const { tasks, addTask, loadTasks } = useTaskStore();
   const [taskTitle, setTaskTitle] = useState('');
   const [reminder, setReminder] = useState<Date | undefined>();
   const [showPicker, setShowPicker] = useState(false);
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     loadTasks();
@@ -23,11 +25,12 @@ export default function TasksScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Lista de Tareas</Text>
+    <View style={[styles.container, isDarkMode && styles.darkContainer]}>
+      <Text style={[styles.title, isDarkMode && styles.darkText]}>Lista de Tareas</Text>
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, isDarkMode && styles.darkInput]}
+          placeholderTextColor={isDarkMode ? "#ccc" : "#999"}
           placeholder="Escribe una nueva tarea..."
           value={taskTitle}
           onChangeText={setTaskTitle}
@@ -36,11 +39,12 @@ export default function TasksScreen() {
           <Text style={styles.dateText}>{reminder ? reminder.toLocaleTimeString() : "⏰"}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.addButton} onPress={handleAddTask}>
-          <Text style={styles.addText}>+</Text>
+          <Text style={[styles.addText, isDarkMode && styles.darkAddText]}>+</Text>
         </TouchableOpacity>
       </View>
       {showPicker && (
         <DateTimePicker
+          textColor={isDarkMode ? "#fff" : "#000"}
           value={reminder || new Date()}
           mode="time"
           is24Hour={true}
@@ -55,7 +59,7 @@ export default function TasksScreen() {
         data={tasks}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <TaskItem {...item} />}
-        ListEmptyComponent={<Text style={styles.emptyText}>No hay tareas aún...</Text>}
+        ListEmptyComponent={<Text style={[styles.emptyText, isDarkMode && styles.darkText]}>No hay tareas aún.</Text>}
       />
     </View>
   )
@@ -69,6 +73,9 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
   },
+  darkContainer: {
+    backgroundColor: '#121212',
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -76,6 +83,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
+  },
+  darkText: {
+    color: '#fff',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -89,6 +99,10 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
+  darkInput: {
+    color: '#fff',
+    backgroundColor: '#333',
+  },
   addButton: {
     backgroundColor: '##007bff',
     padding: 10,
@@ -100,6 +114,9 @@ const styles = StyleSheet.create({
     fontSize: 20, 
     fontWeight: 'bold',
   },
+  darkAddText: {
+    color: '#fff',
+  },
   emptyText: {
     fontSize: 16,
     color: 'gray',
@@ -107,7 +124,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   dateButton: {
-    backgroundColor: '#008f96',
+    backgroundColor: '#B2A5FF',
     padding: 10,
     borderRadius: 5,
     marginLeft: 10,
