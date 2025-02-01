@@ -1,14 +1,18 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Platform } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTaskStore } from '../store/taskStore';
 import TaskItem from '../components/TaskItem';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function TasksScreen() {
-  const { tasks, addTask } = useTaskStore();
+  const { tasks, addTask, loadTasks } = useTaskStore();
   const [taskTitle, setTaskTitle] = useState('');
   const [reminder, setReminder] = useState<Date | undefined>();
   const [showPicker, setShowPicker] = useState(false);
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
   const handleAddTask = () => {
     if (taskTitle.trim() !== "") {
@@ -103,7 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   dateButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#008f96',
     padding: 10,
     borderRadius: 5,
     marginLeft: 10,
