@@ -24,6 +24,8 @@ const { user } = useAuthState();
               Calendar: "calendar",
               Tasks: "list",
               Settings: "settings",
+              Login: "log-in",
+              SignUp: "person-add",
             };
 
             return <Ionicons name={icons[route.name] || "home"} size={size} color={color} />;
