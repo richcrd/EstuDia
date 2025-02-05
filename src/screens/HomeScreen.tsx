@@ -5,7 +5,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@config/firebase';
 
 const HomeScreen = () => {
-  const { loggedInUser, setLoggedInUser } = useAuthState();
+  const { loggedInUser, setLoggedInUser, logout } = useAuthState();
   const signOutUser = () => {
     signOut(auth)
     .then((res) => {
