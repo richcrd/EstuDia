@@ -1,12 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import TabsNavigator from './src/navigation/TabsNavigator';
-import { Platform } from 'react-native';
+import React from 'react';
 import * as Notifications from 'expo-notifications';
-import { useEffect } from 'react';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from './src/context/AuthContext';
+import { useEffect } from 'react';
+import AppNavigator from './src/navigation/AppNavigator';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -36,7 +34,7 @@ export default function App() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <TabsNavigator />
+        <AppNavigator />
       </ThemeProvider>
     </AuthProvider>
   );

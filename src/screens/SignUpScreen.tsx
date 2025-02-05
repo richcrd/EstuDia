@@ -2,19 +2,23 @@ import React, { useState } from "react";
 import { View, TextInput, Button, Text, StyleSheet } from "react-native";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { useAuthState } from "@context/AuthContext";
 
 export default function SignUpScreen({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { setLoggedInUser } = useAuthState();
 
   const handleSignUp = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigation.navigate("HomeScreen");
-    } catch (err: any) {
-      setError(err.message);
-    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        console.log(res.user);
+        setLoggedInUser(res.user);
+      })
+      .catch((re) => {
+        console.log(re);
+      })
   };
 
   return (

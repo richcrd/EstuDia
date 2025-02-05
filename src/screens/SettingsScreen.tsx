@@ -14,7 +14,7 @@ const SettingsScreen = () => {
       await auth.signOut();
       console.log("Usuario deslogueado");
       alert("Usuario deslogueado");
-      navigation.navigate("LoginScreen");
+      navigation.navigate("Login");
     } catch (error) {
       console.error('Error al cerrar sesion', error);
     }

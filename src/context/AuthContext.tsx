@@ -1,24 +1,25 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged, User, signOut } from "firebase/auth";
 import { auth } from "../config/firebase";
 
-type AuthContextType = {
-  user: User | null;
-};
+interface AuthContextType {
+  loggedInUser: User | null;
+  setLoggedInUser: React.Dispatch<React.SetStateAction<User | null>>;
+}
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser);
-    return () => unsubscribe();
-  }, []);
-
-  return <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
+// Hook to use the AuthContext
 export const useAuthState = () => {
   const context = useContext(AuthContext);
   if (!context) throw new Error("useAuthState debe usarse dentro de AuthProvider");
